@@ -1,0 +1,26 @@
+{
+  "dataDir": "~/Documents/Draftwebsiteinfo",
+  "processedDir": "data/processed",
+  "publicModelDir": "public/data/model",
+  "docsDir": "docs",
+  "modelVersion": "0.1.0",
+  "draftClassRange": [2014, 2027],
+  "fileTypes": ["csv", "tsv", "xlsx", "xls", "json", "ndjson", "parquet", "duckdb"],
+  "maxSampleRows": 200,
+  "outcomePreference": [
+    "weighted_av",
+    "wav",
+    "career_av",
+    "drafted_av",
+    "av",
+    "approximate_value",
+    "career_starts",
+    "starts",
+    "games_started",
+    "games",
+    "snaps"
+  ],
+  "hitThresholdPercentile": 0.6,
+  "bustThresholdPercentile": 0.25,
+  "notes": "dataDir is overridable via the DRAFTLENS_DATA_DIR env var or --data-dir CLI flag. The pipeline never writes to dataDir; it is read-only."
+}
