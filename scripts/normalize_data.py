@@ -112,6 +112,8 @@ def main() -> int:
     cfg = dl.load_config()
     ap = argparse.ArgumentParser(description="Normalize inventoried data into a player feature table.")
     ap.add_argument("--data-dir", default=None)
+    ap.add_argument("--include-unknown", action="store_true", help="Also load tables whose purpose was inferred as 'unknown'.")
+    ap.add_argument("--max-rows", type=int, default=None, help="Skip any single table with more than N rows (e.g. play-by-play).")
     args = ap.parse_args()
     _ = dl.resolve_data_dir(args.data_dir)  # validated for parity; reads come from inventory paths
 
@@ -123,20 +125,35 @@ def main() -> int:
     tables = inventory["tables"]
     cls_lo, cls_hi = cfg["draftClassRange"]
 
-    # ----- load all readable tables -----
+    # ----- load relevant tables (with progress) -----
+    relevant = {"draft", "combine", "pff_grades", "college", "outcomes", "player_table"}
+    if args.include_unknown:
+        relevant |= {"unknown"}
+    candidates = [t for t in tables if t["rows"] and t["columns"] and t["purpose"] in relevant]
+    skipped_purpose = [t for t in tables if t["purpose"] not in relevant and t["rows"]]
+    dl.log(
+        f"{len(candidates)} relevant tables to load; "
+        f"skipping {len(skipped_purpose)} as unknown/irrelevant"
+        + ("" if args.include_unknown else " (use --include-unknown to include them)")
+    )
+
     loaded: list[dict[str, Any]] = []
-    for t in tables:
-        if t["rows"] == 0 or not t["columns"]:
+    for i, t in enumerate(candidates, 1):
+        if args.max_rows and t["rows"] > args.max_rows:
+            dl.log(f"  [{i}/{len(candidates)}] skip {t['name']} ({t['rows']:,} rows > --max-rows)")
             continue
         try:
             df = read_table(t["source"], t["fmt"], pd)
         except Exception as exc:  # noqa: BLE001
-            dl.log(f"skip {t['name']}: {exc}")
+            dl.log(f"  [{i}/{len(candidates)}] skip {t['name']}: {exc}")
             continue
         df.columns = [str(c).strip() for c in df.columns]
         loaded.append({"meta": t, "df": df, "roles": role_map(list(df.columns))})
+        if i % 25 == 0 or i == len(candidates):
+            dl.log(f"  loaded {i}/{len(candidates)} tables…")
 
     spines = [x for x in loaded if x["meta"]["purpose"] == "draft" and "pick" in x["roles"]]
+    spine_ids = {id(s["meta"]) for s in spines}
     if not spines:
         dl.log("ERROR: no draft table with a pick column found — cannot build player spine.")
         dl.log("Inventory purposes seen: " + ", ".join(sorted({x['meta']['purpose'] for x in loaded})))
@@ -145,6 +162,7 @@ def main() -> int:
     # ----- build spine entities -----
     entities: dict[str, dict[str, Any]] = {}
     norm_index: dict[tuple[str, str], list[str]] = defaultdict(list)  # (normName, posGroup) -> [playerId]
+    name_index: dict[str, list[str]] = defaultdict(list)  # normName -> [playerId] (O(1) fallback)
     id_index: dict[tuple[str, str], str] = {}  # (idCol, idValue) -> playerId
 
     for sp in spines:
@@ -156,10 +174,10 @@ def main() -> int:
                 continue
             season = to_num(rec.get(roles.get("season", "")))
             draft_class = int(season) if season else None
-            if draft_class is None or not (cls_lo <= draft_class <= cls_hi + 5):
-                # Keep within a sane window; still allow future-ish classes.
-                if draft_class is None:
-                    continue
+            # Only keep classes inside the configured window (drops e.g. pre-2014
+            # draftees that bloat the spine). Future classes up to cls_hi allowed.
+            if draft_class is None or not (cls_lo <= draft_class <= cls_hi):
+                continue
             pos_group = dl.normalize_position(rec.get(roles.get("position", "")))
             base = slug(norm) or f"player-{len(entities)}"
             pid = f"{base}-{draft_class}"
@@ -189,13 +207,18 @@ def main() -> int:
                 },
             )
             norm_index[(norm, ent["positionGroup"])].append(pid)
+            name_index[norm].append(pid)
             for role, col in roles.items():
                 if role == "player_id":
                     val = rec.get(col)
                     if val not in (None, "", "nan"):
                         id_index[(col, str(val))] = pid
 
-    dl.log(f"spine: {len(entities)} player entities")
+    per_class = defaultdict(int)
+    for e in entities.values():
+        per_class[e["draftClass"]] += 1
+    dist = " ".join(f"{y}:{per_class[y]}" for y in sorted(per_class))
+    dl.log(f"spine: {len(entities)} player entities  [{dist}]")
 
     # ----- manual overrides -----
     overrides_path = dl.repo_path(cfg["processedDir"], "manual_player_overrides.csv")
@@ -217,31 +240,31 @@ def main() -> int:
     outcome_names: set[str] = set()
     unmatched: list[dict[str, Any]] = []
 
-    def find_entity(rec: dict[str, Any], roles: dict[str, str]) -> str | None:
-        # 1) shared id
-        for role, col in roles.items():
-            if role == "player_id":
-                val = rec.get(col)
-                if val not in (None, "", "nan") and (col, str(val)) in id_index:
-                    return id_index[(col, str(val))]
+    id_cols = lambda roles: [c for r, c in roles.items() if r == "player_id"]  # noqa: E731
+
+    def find_entity(rec: dict[str, Any], roles: dict[str, str], idcols: list[str]) -> tuple[str | None, str]:
+        # 1) shared id (O(1))
+        for col in idcols:
+            val = rec.get(col)
+            if val not in (None, "", "nan") and (col, str(val)) in id_index:
+                return id_index[(col, str(val))], "id"
         name = get_name(rec, roles)
         norm = dl.normalize_name(name)
+        if not norm:
+            return None, ""
         pos = dl.normalize_position(rec.get(roles.get("position", "")))
         if (norm, pos) in overrides:
-            return overrides[(norm, pos)]
-        # 2) name + position group
-        cands = norm_index.get((norm, pos)) or []
+            return overrides[(norm, pos)], "override"
+        # 2) name + position group, else name-only — both O(1) via prebuilt indexes
+        cands = norm_index.get((norm, pos)) or name_index.get(norm) or []
         if not cands:
-            # fall back to name-only across any position
-            cands = [pid for (n, _), ids in norm_index.items() if n == norm for pid in ids]
-        if not cands:
-            return None
+            return None, ""
         if len(cands) == 1:
-            return cands[0]
+            return cands[0], "name+pos"
         # disambiguate by school, then nearest draft class to season+1
         school = dl.normalize_name(rec.get(roles.get("school", ""), ""))
         season = to_num(rec.get(roles.get("season", "")))
-        best, best_score = None, -1e9
+        best, best_score = cands[0], -1e9
         for pid in cands:
             e = entities[pid]
             score = 0.0
@@ -251,62 +274,88 @@ def main() -> int:
                 score -= abs(e["draftClass"] - (int(season) + 1)) * 0.5
             if score > best_score:
                 best, best_score = pid, score
-        return best
+        return best, "name+pos"
 
-    def numeric_features(df, roles, prefix: str) -> list[str]:
+    def numeric_features(df, roles, prefix: str) -> list[tuple[str, str]]:
         skip = {roles[r] for r in NON_FEATURE_ROLES if r in roles} | {roles.get("age", ""), roles.get("pick", "")}
         feats = []
         for c in df.columns:
             if c in skip or c == "":
                 continue
-            if dl.classify_outcome(c):
+            # identity-ish or outcome columns are never features
+            if dl.classify_column(c) or dl.classify_outcome(c):
                 continue
-            if pd.api.types.is_numeric_dtype(df[c]):
+            coerced = pd.to_numeric(df[c], errors="coerce")
+            if len(coerced) and coerced.notna().mean() >= 0.5:
                 feats.append((c, f"{prefix}_{c}"))
         return feats
 
-    # choose best season row per entity for player-season tables
-    for x in loaded:
-        meta, df, roles = x["meta"], x["df"], x["roles"]
-        if meta in [s["meta"] for s in spines]:
-            continue
-        is_outcome = meta["purpose"] == "outcomes" or any(dl.classify_outcome(c) for c in df.columns)
-        prefix = re.sub(r"[^a-z0-9]+", "", meta["purpose"].lower()) or "src"
-        feat_cols = numeric_features(df, roles, prefix)
-        outcome_cols = [(c, c.lower()) for c in df.columns if dl.classify_outcome(c)]
+    # Merge all tables of the same purpose, then match once. This is what folds a
+    # player's multiple entries (e.g. one PFF file per season) into one record:
+    # rows are ordered by season-closeness to draftClass-1 and the first non-null
+    # value wins per feature.
+    non_spine = [x for x in loaded if id(x["meta"]) not in spine_ids]
+    by_purpose: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for x in non_spine:
+        by_purpose[x["meta"]["purpose"]].append(x)
 
-        records = df.to_dict("records")
-        # group rows by matched entity, keep the season closest to draftClass-1
+    UNMATCHED_CAP = 5000
+    unmatched_count = 0
+    match_summary: dict[str, dict[str, int]] = {}
+
+    for purpose, group in by_purpose.items():
+        prefix = re.sub(r"[^a-z0-9]+", "", purpose.lower()) or "src"
+        frames = [x["df"] for x in group]
+        try:
+            big = pd.concat(frames, ignore_index=True, sort=False) if len(frames) > 1 else frames[0]
+        except Exception:  # noqa: BLE001
+            big = frames[0]
+        roles = role_map(list(big.columns))
+        idcols = id_cols(roles)
+        season_col = roles.get("season")
+        is_outcome = purpose == "outcomes" or any(dl.classify_outcome(c) for c in big.columns)
+        feat_cols = numeric_features(big, roles, prefix)
+        outcome_cols = [(c, c.lower()) for c in big.columns if dl.classify_outcome(c)]
+
+        records = big.to_dict("records")
+        dl.log(f"matching '{purpose}': {len(records):,} rows from {len(frames)} file(s) → {len(feat_cols)} feature(s)")
+
         grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        methods = defaultdict(int)
         for rec in records:
-            pid = find_entity(rec, roles)
+            pid, method = find_entity(rec, roles, idcols)
             if pid is None:
-                unmatched.append(
-                    {"table": meta["name"], "name": get_name(rec, roles), "position": str(rec.get(roles.get("position", ""), "") or "")}
-                )
+                unmatched_count += 1
+                if len(unmatched) < UNMATCHED_CAP:
+                    unmatched.append(
+                        {"purpose": purpose, "name": get_name(rec, roles), "position": str(rec.get(roles.get("position", ""), "") or "")}
+                    )
                 continue
+            methods[method] += 1
             grouped[pid].append(rec)
+        match_summary[purpose] = {"matchedRows": sum(methods.values()), "players": len(grouped), **methods}
 
         for pid, recs in grouped.items():
             e = entities[pid]
-            if "season" in roles and len(recs) > 1 and e["draftClass"]:
+            if season_col and len(recs) > 1 and e["draftClass"]:
                 target = e["draftClass"] - 1
-                recs = sorted(recs, key=lambda r: abs((to_num(r.get(roles["season"])) or target) - target))
-            rec = recs[0]
-            e["matched"][meta["name"]] = "id" if any(
-                r == "player_id" for r in roles
-            ) else "name+pos"
+                recs = sorted(recs, key=lambda r: abs((to_num(r.get(season_col)) or target) - target))
+            e["matched"][purpose] = "merged" if len(recs) > 1 else "matched"
             for src_col, feat_name in feat_cols:
-                val = to_num(rec.get(src_col))
-                if val is not None:
-                    e["features"][feat_name] = val
-                    feature_names.add(feat_name)
-            if is_outcome:
-                for src_col, _ in outcome_cols:
-                    val = to_num(rec.get(src_col))
+                for r in recs:
+                    val = to_num(r.get(src_col))
                     if val is not None:
-                        e["outcomes"][src_col.lower()] = val
-                        outcome_names.add(src_col.lower())
+                        e["features"][feat_name] = val
+                        feature_names.add(feat_name)
+                        break
+            if is_outcome:
+                for src_col, low in outcome_cols:
+                    for r in recs:
+                        val = to_num(r.get(src_col))
+                        if val is not None:
+                            e["outcomes"][low] = val
+                            outcome_names.add(low)
+                            break
 
     # derived pre-draft feature: draft capital from pick (value-curve style)
     for e in entities.values():
@@ -339,17 +388,31 @@ def main() -> int:
         },
     )
     with open(dl.repo_path(out_dir, "unmatched_players.csv"), "w", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=["table", "name", "position"])
+        w = csv.DictWriter(fh, fieldnames=["purpose", "name", "position"])
         w.writeheader()
         w.writerows(unmatched)
 
+    dl.write_json(
+        dl.repo_path(out_dir, "normalize_diagnostics.json"),
+        {
+            "generatedAt": datetime.now(timezone.utc).isoformat(),
+            "spineEntities": len(players),
+            "entitiesPerClass": {str(k): v for k, v in sorted(per_class.items())},
+            "matchByPurpose": match_summary,
+            "unmatchedRows": unmatched_count,
+            "preDraftFeatureCount": len(all_feats),
+            "outcomeFields": sorted(outcome_names),
+        },
+    )
+
     write_dictionary(cfg, players, all_feats, sorted(outcome_names))
-    write_matching_strategy(cfg, players, spines, unmatched)
+    write_matching_strategy(cfg, players, spines, unmatched_count)
 
     dl.log(
         f"normalized {len(players)} players · {len(all_feats)} pre-draft features · "
-        f"{len(outcome_names)} outcome fields · {len(unmatched)} unmatched source rows"
+        f"{len(outcome_names)} outcome fields · {unmatched_count} unmatched source rows"
     )
+    dl.log("diagnostics → data/processed/normalize_diagnostics.json")
     return 0
 
 
@@ -399,7 +462,7 @@ def write_dictionary(cfg, players, features, outcomes) -> None:
     dl.write_text(dl.repo_path(cfg["docsDir"], "data_dictionary.md"), "\n".join(lines) + "\n")
 
 
-def write_matching_strategy(cfg, players, spines, unmatched) -> None:
+def write_matching_strategy(cfg, players, spines, unmatched_count: int) -> None:
     matched_counts: dict[str, int] = defaultdict(int)
     for p in players:
         for src in p["matched"]:
@@ -426,9 +489,9 @@ def write_matching_strategy(cfg, players, spines, unmatched) -> None:
         "",
         f"- Spine tables: {', '.join(s['meta']['name'] for s in spines)}",
         f"- Player entities: **{len(players)}**",
-        f"- Unmatched source rows: **{len(unmatched)}** (see `unmatched_players.csv`)",
+        f"- Unmatched source rows: **{unmatched_count}** (sampled in `unmatched_players.csv`)",
         "",
-        "| Source table | Players matched |",
+        "| Source purpose | Players matched |",
         "| --- | ---: |",
     ]
     for src, n in sorted(matched_counts.items()):
