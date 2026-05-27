@@ -1,0 +1,15 @@
+{
+  "modelVersion": "0.0.0-empty",
+  "generatedAt": null,
+  "dataReady": false,
+  "playerCount": 0,
+  "classesAvailable": [],
+  "outcomeTarget": null,
+  "outcomeUnits": null,
+  "datasets": [],
+  "warnings": [
+    "No data generated yet. These are empty-state stubs so the site can build and deploy.",
+    "Run the local pipeline on your machine where Documents/Draftwebsiteinfo lives: npm run data:inventory && npm run data:build && npm run model:train && npm run model:export"
+  ],
+  "message": "DraftLens is awaiting its first data build."
+}

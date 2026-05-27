@@ -1,0 +1,48 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build output
+dist
+dist-ssr
+*.local
+*.tsbuildinfo
+
+# Private / raw data — NEVER commit
+local_data/
+data_private/
+data/raw/
+data/processed/
+*.duckdb
+*.duckdb.wal
+*.xlsx
+*.xls
+*.parquet
+
+# Allow the committed public model outputs (frontend-safe) through the broad ignores below.
+!public/data/model/
+!public/data/model/**
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.python-version
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.log
+
+# Logs from local pipeline runs
+scripts/.cache/
+*.tmp
