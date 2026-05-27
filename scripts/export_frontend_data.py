@@ -42,17 +42,19 @@ def main() -> int:
     for r in players:
         if r["draftClass"]:
             by_year[r["draftClass"]].append(r)
-    years_with_outcomes = [y for y, recs in by_year.items() if any(x["realizedValue"] is not None for x in recs)]
-    max_outcome_year = max(years_with_outcomes) if years_with_outcomes else None
+    # A class is "future" if its draft has not happened yet (after the latest
+    # completed draft). Completed-but-young classes without mature outcomes are
+    # "recent"; older classes with outcomes are "historical".
+    latest_completed = cfg.get("latestCompletedDraft")
 
     classes = []
     for year in sorted(by_year):
         recs = by_year[year]
         has_out = any(x["realizedValue"] is not None for x in recs)
-        if has_out:
-            kind = "historical"
-        elif max_outcome_year is not None and year > max_outcome_year:
+        if latest_completed is not None and year > latest_completed:
             kind = "future"
+        elif has_out:
+            kind = "historical"
         else:
             kind = "recent"
         top = [r["playerId"] for r in sorted(recs, key=lambda x: -x["draftLensScore"])[:5]]

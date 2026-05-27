@@ -5,6 +5,7 @@
   "docsDir": "docs",
   "modelVersion": "0.1.0",
   "draftClassRange": [2014, 2027],
+  "latestCompletedDraft": 2026,
   "fileTypes": ["csv", "tsv", "xlsx", "xls", "json", "ndjson", "parquet", "duckdb"],
   "maxSampleRows": 200,
   "outcomePreference": [
