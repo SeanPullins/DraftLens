@@ -172,6 +172,8 @@ def main() -> int:
         cands_by_purpose[t["purpose"]].append(t)
 
     # ----- build spine entities from draft tables (load → use → free) -----
+    feature_names: set[str] = set()
+    outcome_names: set[str] = set()
     entities: dict[str, dict[str, Any]] = {}
     norm_index: dict[tuple[str, str], list[str]] = defaultdict(list)  # (normName, posGroup) -> [playerId]
     name_index: dict[str, list[str]] = defaultdict(list)  # normName -> [playerId] (O(1) fallback)
@@ -235,6 +237,17 @@ def main() -> int:
                     val = rec.get(col)
                     if val not in (None, "", "nan"):
                         id_index[(col, str(val))] = pid
+            # The draft (spine) table also carries canonical post-draft outcomes
+            # (career AV, games, Pro Bowls). Capture them as LABELS only — never as
+            # features — so nearly every player has a training target. These career
+            # totals take precedence over season-level outcomes attached later.
+            for col in df.columns:
+                if dl.classify_outcome(col):
+                    val = to_num(rec.get(col))
+                    if val is not None:
+                        low = str(col).strip().lower()
+                        ent["outcomes"].setdefault(low, val)
+                        outcome_names.add(low)
         del df
         gc.collect()
 
@@ -265,8 +278,6 @@ def main() -> int:
         )
 
     # ----- attach features / outcomes from non-spine tables -----
-    feature_names: set[str] = set()
-    outcome_names: set[str] = set()
     unmatched: list[dict[str, Any]] = []
 
     id_cols = lambda roles: [c for r, c in roles.items() if r == "player_id"]  # noqa: E731
@@ -406,7 +417,8 @@ def main() -> int:
     for pid, oa in out_acc.items():
         eo = entities[pid]["outcomes"]
         for low, (_, val) in oa.items():
-            eo[low] = val
+            # Don't let a season-level value clobber a spine career total.
+            eo.setdefault(low, val)
     for pid, pc in purpose_counts.items():
         em = entities[pid]["matched"]
         for purpose, cnt in pc.items():
