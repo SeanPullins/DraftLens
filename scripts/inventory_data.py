@@ -216,6 +216,21 @@ def profile_duckdb(sf: dl.SourceFile, max_sample: int) -> list[dl.TableProfile]:
     return profiles
 
 
+def profile_text(sf: dl.SourceFile, max_sample: int) -> dl.TableProfile:
+    profile = dl.TableProfile(name=sf.path.name, source=str(sf.path), fmt=sf.ext, rows=0, columns=[])
+    try:
+        with open(sf.path, "r", encoding="utf-8", errors="replace") as fh:
+            line_count = 0
+            for _ in fh:
+                line_count += 1
+        profile.rows = line_count
+        profile.purpose = "text"
+        _ = max_sample
+    except Exception as exc:  # noqa: BLE001
+        profile.warnings.append(f"could not read: {exc}")
+    return profile
+
+
 def profile_file(sf: dl.SourceFile, max_sample: int) -> list[dl.TableProfile]:
     if sf.ext in ("csv", "tsv"):
         return [profile_delimited(sf, max_sample)]
@@ -227,6 +242,8 @@ def profile_file(sf: dl.SourceFile, max_sample: int) -> list[dl.TableProfile]:
         return [profile_parquet(sf, max_sample)]
     if sf.ext == "duckdb":
         return profile_duckdb(sf, max_sample)
+    if sf.ext in ("txt", "md", "log", "html"):
+        return [profile_text(sf, max_sample)]
     p = dl.TableProfile(name=sf.path.name, source=str(sf.path), fmt=sf.ext, rows=0, columns=[])
     p.warnings.append("unsupported format")
     return [p]

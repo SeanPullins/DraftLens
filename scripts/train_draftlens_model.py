@@ -63,19 +63,103 @@ def humanize(feature: str) -> str:
     return label.replace("_", " ").strip().capitalize()
 
 
+def _load_from_gold(gold_csv: "Path", pd) -> "tuple[list[dict], list[str], list[str]] | None":
+    """Load players, features, and outcome fields from the gold CSV.
+
+    Returns (players, feature_cols, outcome_cols) in the same shape that
+    players_features.json provides, or None on any error.
+    """
+    try:
+        df = pd.read_csv(gold_csv, low_memory=False)
+    except Exception as exc:
+        dl.log(f"gold dataset unreadable ({exc}); falling back to silver")
+        return None
+
+    out_prefix = "outcome_"
+    id_cols = {"player_id", "name", "position", "position_group", "school",
+               "draft_class", "actual_pick", "actual_round", "actual_team", "age",
+               "data_completeness"}
+    feature_cols = [c for c in df.columns if c not in id_cols and not c.startswith(out_prefix)]
+    outcome_raw = [c for c in df.columns if c.startswith(out_prefix)]
+    outcome_fields = [c[len(out_prefix):] for c in outcome_raw]
+
+    players = []
+    for _, row in df.iterrows():
+        features_d = {f: (None if str(row.get(f, "")) in ("nan", "") else float(row[f]))  # type: ignore[arg-type]
+                      for f in feature_cols if row.get(f) is not None}
+        features_d = {k: v for k, v in features_d.items() if v is not None}
+        outcomes_d = {}
+        for raw_col, field in zip(outcome_raw, outcome_fields):
+            v = row.get(raw_col)
+            if v is not None and str(v) not in ("nan", ""):
+                try:
+                    outcomes_d[field] = float(v)
+                except (TypeError, ValueError):
+                    pass
+        players.append({
+            "playerId": row.get("player_id"),
+            "name": row.get("name") or "",
+            "position": row.get("position") or "",
+            "positionGroup": row.get("position_group") or "UNK",
+            "school": row.get("school") or "",
+            "draftClass": int(row["draft_class"]) if str(row.get("draft_class", "")) not in ("nan", "") else None,
+            "actualPick": (None if str(row.get("actual_pick", "")) in ("nan", "") else int(float(row["actual_pick"]))),
+            "actualRound": (None if str(row.get("actual_round", "")) in ("nan", "") else int(float(row["actual_round"]))),
+            "actualTeam": row.get("actual_team") or None,
+            "age": (None if str(row.get("age", "")) in ("nan", "") else float(row["age"])),
+            "dataCompleteness": float(row.get("data_completeness") or 0),
+            "features": features_d,
+            "outcomes": outcomes_d,
+            "matched": {},
+        })
+    dl.log(f"loaded {len(players)} players from gold dataset {gold_csv.name}")
+    return players, feature_cols, outcome_fields
+
+
 def main() -> int:
     cfg = dl.load_config()
     proc = cfg["processedDir"]
+    gold_dir = cfg.get("goldDir", "data/gold")
+    gold_csv = dl.repo_path(gold_dir, "draftlens_training_dataset.csv")
+
+    # Prefer gold layer (one tidy CSV); fall back to silver players_features.json.
     players_path = dl.repo_path(proc, "players_features.json")
     fm_path = dl.repo_path(proc, "feature_manifest.json")
-    if not players_path.exists() or not fm_path.exists():
-        dl.log("ERROR: run `npm run data:build` first (missing players_features/feature_manifest).")
-        return 2
 
-    players = json.loads(players_path.read_text())
-    fm = json.loads(fm_path.read_text())
-    features: list[str] = fm["preDraftFeatures"]
-    outcome_fields: list[str] = fm["outcomeFields"]
+    players: list[dict]
+    features: list[str]
+    outcome_fields: list[str]
+
+    if gold_csv.exists():
+        try:
+            import pandas as pd  # type: ignore
+        except ImportError:
+            pd = None  # type: ignore
+
+        gold_result = _load_from_gold(gold_csv, pd) if pd else None
+        if gold_result:
+            players, features, outcome_fields = gold_result
+        else:
+            # fall through to silver
+            gold_result = None
+
+        if gold_result is None:
+            if not players_path.exists() or not fm_path.exists():
+                dl.log("ERROR: run `npm run data:normalize` first (missing players_features/feature_manifest).")
+                return 2
+            players = json.loads(players_path.read_text())
+            fm = json.loads(fm_path.read_text())
+            features = fm["preDraftFeatures"]
+            outcome_fields = fm["outcomeFields"]
+    else:
+        if not players_path.exists() or not fm_path.exists():
+            dl.log("ERROR: run `npm run data:normalize` first (missing players_features/feature_manifest).")
+            return 2
+        players = json.loads(players_path.read_text())
+        fm = json.loads(fm_path.read_text())
+        features = fm["preDraftFeatures"]
+        outcome_fields = fm["outcomeFields"]
+
     if not players:
         dl.log("ERROR: no players to score.")
         return 2

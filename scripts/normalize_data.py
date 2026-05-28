@@ -47,7 +47,7 @@ def _require_pandas():
         raise SystemExit(2)
 
 
-def read_table(source: str, fmt: str, pd) -> "Any":
+def read_table(source: str, fmt: str, pd, table_name: str | None = None) -> "Any":
     p = Path(source)
     if fmt in ("csv", "tsv"):
         return pd.read_csv(p, sep="\t" if fmt == "tsv" else None, engine="python", encoding="utf-8-sig")
@@ -62,12 +62,12 @@ def read_table(source: str, fmt: str, pd) -> "Any":
     if fmt == "duckdb":
         import duckdb  # type: ignore
 
-        path, table = source, None
-        con = duckdb.connect(path, read_only=True)
+        con = duckdb.connect(source, read_only=True)
         try:
-            tbl = con.execute("SHOW TABLES").fetchone()
-            table = tbl[0] if tbl else None
-            return con.execute(f'SELECT * FROM "{table}"').df()
+            if table_name is None:
+                tbl = con.execute("SHOW TABLES").fetchone()
+                table_name = tbl[0] if tbl else None
+            return con.execute(f'SELECT * FROM "{table_name}"').df()
         finally:
             con.close()
     raise ValueError(f"unsupported format: {fmt}")
@@ -137,13 +137,26 @@ def main() -> int:
         + ("" if args.include_unknown else " (use --include-unknown to include them)")
     )
 
+    max_rows_cfg = cfg.get("maxNormalizeRows", 2_000_000)
+    max_rows_limit = args.max_rows or max_rows_cfg
+
+    # Patterns for known play-by-play / snap-level tables we should not load.
+    _PBP_NAMES = re.compile(r"(play.?by.?play|^pbp|_pbp|weekly|nextgen|tracking|participation|injuries|schedule)", re.I)
+
     loaded: list[dict[str, Any]] = []
     for i, t in enumerate(candidates, 1):
-        if args.max_rows and t["rows"] > args.max_rows:
-            dl.log(f"  [{i}/{len(candidates)}] skip {t['name']} ({t['rows']:,} rows > --max-rows)")
+        if max_rows_limit and t["rows"] > max_rows_limit:
+            dl.log(f"  [{i}/{len(candidates)}] skip {t['name']} ({t['rows']:,} rows > row limit)")
             continue
+        if _PBP_NAMES.search(t["name"]):
+            dl.log(f"  [{i}/{len(candidates)}] skip {t['name']} (looks like PBP/tracking table)")
+            continue
+        # For duckdb tables the name is "file.duckdb::tablename"; extract the table part.
+        tbl_name: str | None = None
+        if t["fmt"] == "duckdb" and "::" in t["name"]:
+            tbl_name = t["name"].split("::", 1)[1]
         try:
-            df = read_table(t["source"], t["fmt"], pd)
+            df = read_table(t["source"], t["fmt"], pd, table_name=tbl_name)
         except Exception as exc:  # noqa: BLE001
             dl.log(f"  [{i}/{len(candidates)}] skip {t['name']}: {exc}")
             continue

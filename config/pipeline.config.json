@@ -6,8 +6,12 @@
   "modelVersion": "0.1.0",
   "draftClassRange": [2014, 2027],
   "latestCompletedDraft": 2026,
-  "fileTypes": ["csv", "tsv", "xlsx", "xls", "json", "ndjson", "parquet", "duckdb"],
+  "bronzeDir": "data/bronze",
+  "goldDir": "data/gold",
+  "fileTypes": ["csv", "tsv", "xlsx", "xls", "json", "ndjson", "parquet", "duckdb", "txt", "md", "log", "html"],
+  "textFileTypes": ["txt", "md", "log", "html"],
   "maxSampleRows": 200,
+  "maxNormalizeRows": 2000000,
   "outcomePreference": [
     "weighted_av",
     "wav",

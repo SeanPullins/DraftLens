@@ -10,9 +10,15 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
     "data:inventory": "python3 scripts/inventory_data.py",
+    "data:extract": "python3 scripts/extract_text_blocks.py",
+    "data:normalize": "python3 scripts/normalize_data.py",
     "data:build": "python3 scripts/normalize_data.py",
+    "data:training": "python3 scripts/build_training_dataset.py",
+    "data:all": "npm run data:inventory && npm run data:extract && npm run data:normalize && npm run data:training",
     "model:train": "python3 scripts/train_draftlens_model.py",
     "model:export": "python3 scripts/export_frontend_data.py",
+    "model:all": "npm run model:train && npm run model:export",
+    "pipeline": "npm run data:all && npm run model:all",
     "validate": "npm run typecheck && npm run build"
   },
   "dependencies": {
