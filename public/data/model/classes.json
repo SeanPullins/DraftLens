@@ -4,11 +4,11 @@
     "kind": "historical",
     "playerCount": 268,
     "topPlayerIds": [
-      "marcus-smith-2014",
-      "maurice-alexander-2014",
-      "stephon-tuitt-2014",
-      "ryan-shazier-2014",
-      "deone-bucannon-2014"
+      "mike-evans-2014",
+      "zack-martin-2014",
+      "derek-carr-2014",
+      "davante-adams-2014",
+      "eric-ebron-2014"
     ],
     "positionsCovered": [
       "CB",
@@ -32,14 +32,14 @@
   },
   {
     "year": 2015,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 269,
     "topPlayerIds": [
+      "stefon-diggs-2015",
+      "jameis-winston-2015",
+      "marcus-mariota-2015",
       "amari-cooper-2015",
-      "kevin-white-2015",
-      "ereck-flowers-2015",
-      "t-j-yeldon-2015",
-      "ameer-abdullah-2015"
+      "todd-gurley-2015"
     ],
     "positionsCovered": [
       "CB",
@@ -62,18 +62,18 @@
       "WIDE RECEIVER",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   },
   {
     "year": 2016,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 261,
     "topPlayerIds": [
-      "vernon-hargreaves-2016",
-      "corey-coleman-2016",
-      "c-j-prosise-2016",
       "jared-goff-2016",
-      "ezekiel-elliott-2016"
+      "chris-jones-2016",
+      "dak-prescott-2016",
+      "tyreek-hill-2016",
+      "carson-wentz-2016"
     ],
     "positionsCovered": [
       "CB",
@@ -96,18 +96,18 @@
       "TE",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   },
   {
     "year": 2017,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 267,
     "topPlayerIds": [
-      "myles-garrett-2017",
-      "solomon-thomas-2017",
       "christian-mccaffrey-2017",
-      "david-njoku-2017",
-      "t-j-watt-2017"
+      "patrick-mahomes-2017",
+      "alvin-kamara-2017",
+      "deshaun-watson-2017",
+      "joe-mixon-2017"
     ],
     "positionsCovered": [
       "CB",
@@ -127,18 +127,18 @@
       "TE",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   },
   {
     "year": 2018,
     "kind": "historical",
     "playerCount": 277,
     "topPlayerIds": [
+      "baker-mayfield-2018",
+      "josh-allen-2018",
+      "lamar-jackson-2018",
       "saquon-barkley-2018",
-      "terrell-edmunds-2018",
-      "mike-hughes-2018",
-      "josh-jackson-2018",
-      "denzel-ward-2018"
+      "sam-darnold-2018"
     ],
     "positionsCovered": [
       "CB",
@@ -167,11 +167,11 @@
     "kind": "historical",
     "playerCount": 265,
     "topPlayerIds": [
-      "ed-oliver-2019",
-      "dexter-lawrence-2019",
-      "josh-allen-2019",
-      "jeffery-simmons-2019",
-      "quinnen-williams-2019"
+      "clayton-thorson-2019",
+      "kyler-murray-2019",
+      "a-j-brown-2019",
+      "zach-allen-2019",
+      "daniel-jones-2019"
     ],
     "positionsCovered": [
       "CB",
@@ -196,14 +196,14 @@
   },
   {
     "year": 2020,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 269,
     "topPlayerIds": [
-      "jeff-okudah-2020",
-      "isaiah-simmons-2020",
-      "c-j-henderson-2020",
-      "mekhi-becton-2020",
-      "kenneth-murray-2020"
+      "jalen-hurts-2020",
+      "joe-burrow-2020",
+      "justin-herbert-2020",
+      "ceedee-lamb-2020",
+      "justin-jefferson-2020"
     ],
     "positionsCovered": [
       "CB",
@@ -225,18 +225,18 @@
       "WIDE RECEIVER",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   },
   {
     "year": 2021,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 268,
     "topPlayerIds": [
+      "amon-ra-st-brown-2021",
       "trevor-lawrence-2021",
-      "rashod-bateman-2021",
-      "pat-freiermuth-2021",
-      "joe-tryon-2021",
-      "ja-marr-chase-2021"
+      "ja-marr-chase-2021",
+      "devonta-smith-2021",
+      "justin-fields-2021"
     ],
     "positionsCovered": [
       "CB",
@@ -255,18 +255,18 @@
       "TE",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   },
   {
     "year": 2022,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 275,
     "topPlayerIds": [
-      "breece-hall-2022",
-      "jordan-davis-2022",
-      "jermaine-johnson-2022",
-      "skyy-moore-2022",
-      "brandon-smith-2022"
+      "matt-corral-2022",
+      "chris-olave-2022",
+      "brock-purdy-2022",
+      "drake-london-2022",
+      "christian-watson-2022"
     ],
     "positionsCovered": [
       "CB",
@@ -287,7 +287,7 @@
       "TIGHT END",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   },
   {
     "year": 2023,
@@ -295,10 +295,10 @@
     "playerCount": 267,
     "topPlayerIds": [
       "bijan-robinson-2023",
-      "c-j-stroud-2023",
-      "jordan-addison-2023",
-      "jartavius-martin-2023",
-      "jahmyr-gibbs-2023"
+      "puka-nacua-2023",
+      "jahmyr-gibbs-2023",
+      "max-duggan-2023",
+      "c-j-stroud-2023"
     ],
     "positionsCovered": [
       "CB",
@@ -322,14 +322,14 @@
   },
   {
     "year": 2024,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 262,
     "topPlayerIds": [
+      "devin-leary-2024",
       "olu-fashanu-2024",
-      "brock-bowers-2024",
-      "xavier-worthy-2024",
-      "mike-sainristil-2024",
-      "malik-nabers-2024"
+      "jc-latham-2024",
+      "caleb-williams-2024",
+      "braden-fiske-2024"
     ],
     "positionsCovered": [
       "CB",
@@ -346,18 +346,18 @@
       "TE",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   },
   {
     "year": 2025,
-    "kind": "recent",
+    "kind": "historical",
     "playerCount": 260,
     "topPlayerIds": [
-      "treveyon-henderson-2025",
-      "jayden-higgins-2025",
-      "mason-taylor-2025",
-      "bhayshul-tuten-2025",
-      "cam-ward-2025"
+      "john-williams-2025",
+      "will-howard-2025",
+      "mason-graham-2025",
+      "gavin-bartholomew-2025",
+      "will-campbell-2025"
     ],
     "positionsCovered": [
       "CB",
@@ -375,6 +375,6 @@
       "TE",
       "WR"
     ],
-    "hasOutcomes": false
+    "hasOutcomes": true
   }
 ]
