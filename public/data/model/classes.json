@@ -1,1 +1,380 @@
-[]
+[
+  {
+    "year": 2014,
+    "kind": "historical",
+    "playerCount": 268,
+    "topPlayerIds": [
+      "marcus-smith-2014",
+      "maurice-alexander-2014",
+      "stephon-tuitt-2014",
+      "ryan-shazier-2014",
+      "deone-bucannon-2014"
+    ],
+    "positionsCovered": [
+      "CB",
+      "CORNERBACK",
+      "DEFENSIVE END",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "OL",
+      "OUTSIDE LINEBACKER",
+      "P",
+      "QB",
+      "RB",
+      "SAFETY",
+      "TE",
+      "WIDE RECEIVER",
+      "WR"
+    ],
+    "hasOutcomes": true
+  },
+  {
+    "year": 2015,
+    "kind": "recent",
+    "playerCount": 269,
+    "topPlayerIds": [
+      "amari-cooper-2015",
+      "kevin-white-2015",
+      "ereck-flowers-2015",
+      "t-j-yeldon-2015",
+      "ameer-abdullah-2015"
+    ],
+    "positionsCovered": [
+      "CB",
+      "DEFENSIVE END",
+      "DL",
+      "EDGE",
+      "LB",
+      "LS",
+      "OFFENSIVE GUARD",
+      "OFFENSIVE TACKLE",
+      "OL",
+      "P",
+      "QB",
+      "RB",
+      "RUNNING BACK",
+      "S",
+      "SAFETY",
+      "TE",
+      "TIGHT END",
+      "WIDE RECEIVER",
+      "WR"
+    ],
+    "hasOutcomes": false
+  },
+  {
+    "year": 2016,
+    "kind": "recent",
+    "playerCount": 261,
+    "topPlayerIds": [
+      "vernon-hargreaves-2016",
+      "corey-coleman-2016",
+      "c-j-prosise-2016",
+      "jared-goff-2016",
+      "ezekiel-elliott-2016"
+    ],
+    "positionsCovered": [
+      "CB",
+      "DEFENSIVE TACKLE",
+      "DL",
+      "EDGE",
+      "FULLBACK",
+      "K",
+      "LB",
+      "LS",
+      "OL",
+      "OUTSIDE LINEBACKER",
+      "P",
+      "PUNTER",
+      "QB",
+      "RB",
+      "S",
+      "SAFETY",
+      "SPEC",
+      "TE",
+      "WR"
+    ],
+    "hasOutcomes": false
+  },
+  {
+    "year": 2017,
+    "kind": "recent",
+    "playerCount": 267,
+    "topPlayerIds": [
+      "myles-garrett-2017",
+      "solomon-thomas-2017",
+      "christian-mccaffrey-2017",
+      "david-njoku-2017",
+      "t-j-watt-2017"
+    ],
+    "positionsCovered": [
+      "CB",
+      "CORNERBACK",
+      "DEFENSIVE END",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "LS",
+      "OL",
+      "QB",
+      "RB",
+      "RUNNING BACK",
+      "S",
+      "SAFETY",
+      "TE",
+      "WR"
+    ],
+    "hasOutcomes": false
+  },
+  {
+    "year": 2018,
+    "kind": "historical",
+    "playerCount": 277,
+    "topPlayerIds": [
+      "saquon-barkley-2018",
+      "terrell-edmunds-2018",
+      "mike-hughes-2018",
+      "josh-jackson-2018",
+      "denzel-ward-2018"
+    ],
+    "positionsCovered": [
+      "CB",
+      "DEFENSIVE END",
+      "DEFENSIVE TACKLE",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "LS",
+      "OL",
+      "OUTSIDE LINEBACKER",
+      "P",
+      "QB",
+      "RB",
+      "S",
+      "SPEC",
+      "TE",
+      "WIDE RECEIVER",
+      "WR"
+    ],
+    "hasOutcomes": true
+  },
+  {
+    "year": 2019,
+    "kind": "historical",
+    "playerCount": 265,
+    "topPlayerIds": [
+      "ed-oliver-2019",
+      "dexter-lawrence-2019",
+      "josh-allen-2019",
+      "jeffery-simmons-2019",
+      "quinnen-williams-2019"
+    ],
+    "positionsCovered": [
+      "CB",
+      "CORNERBACK",
+      "DEFENSIVE TACKLE",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "LS",
+      "OL",
+      "OUTSIDE LINEBACKER",
+      "P",
+      "QB",
+      "RB",
+      "S",
+      "SAFETY",
+      "TE",
+      "WR"
+    ],
+    "hasOutcomes": true
+  },
+  {
+    "year": 2020,
+    "kind": "recent",
+    "playerCount": 269,
+    "topPlayerIds": [
+      "jeff-okudah-2020",
+      "isaiah-simmons-2020",
+      "c-j-henderson-2020",
+      "mekhi-becton-2020",
+      "kenneth-murray-2020"
+    ],
+    "positionsCovered": [
+      "CB",
+      "CORNERBACK",
+      "DEFENSIVE END",
+      "DEFENSIVE TACKLE",
+      "DL",
+      "EDGE",
+      "INSIDE LINEBACKER",
+      "K",
+      "LB",
+      "LS",
+      "OL",
+      "P",
+      "QB",
+      "RB",
+      "S",
+      "TE",
+      "WIDE RECEIVER",
+      "WR"
+    ],
+    "hasOutcomes": false
+  },
+  {
+    "year": 2021,
+    "kind": "recent",
+    "playerCount": 268,
+    "topPlayerIds": [
+      "trevor-lawrence-2021",
+      "rashod-bateman-2021",
+      "pat-freiermuth-2021",
+      "joe-tryon-2021",
+      "ja-marr-chase-2021"
+    ],
+    "positionsCovered": [
+      "CB",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "LS",
+      "OL",
+      "OUTSIDE LINEBACKER",
+      "P",
+      "QB",
+      "RB",
+      "S",
+      "SAFETY",
+      "TE",
+      "WR"
+    ],
+    "hasOutcomes": false
+  },
+  {
+    "year": 2022,
+    "kind": "recent",
+    "playerCount": 275,
+    "topPlayerIds": [
+      "breece-hall-2022",
+      "jordan-davis-2022",
+      "jermaine-johnson-2022",
+      "skyy-moore-2022",
+      "brandon-smith-2022"
+    ],
+    "positionsCovered": [
+      "CB",
+      "CENTER",
+      "CORNERBACK",
+      "DEFENSIVE TACKLE",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "OL",
+      "P",
+      "QB",
+      "RB",
+      "RUNNING BACK",
+      "S",
+      "TE",
+      "TIGHT END",
+      "WR"
+    ],
+    "hasOutcomes": false
+  },
+  {
+    "year": 2023,
+    "kind": "historical",
+    "playerCount": 267,
+    "topPlayerIds": [
+      "bijan-robinson-2023",
+      "c-j-stroud-2023",
+      "jordan-addison-2023",
+      "jartavius-martin-2023",
+      "jahmyr-gibbs-2023"
+    ],
+    "positionsCovered": [
+      "CB",
+      "CORNERBACK",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "OL",
+      "P",
+      "QB",
+      "RB",
+      "RUNNING BACK",
+      "S",
+      "SAFETY",
+      "TE",
+      "WIDE RECEIVER",
+      "WR"
+    ],
+    "hasOutcomes": true
+  },
+  {
+    "year": 2024,
+    "kind": "recent",
+    "playerCount": 262,
+    "topPlayerIds": [
+      "olu-fashanu-2024",
+      "brock-bowers-2024",
+      "xavier-worthy-2024",
+      "mike-sainristil-2024",
+      "malik-nabers-2024"
+    ],
+    "positionsCovered": [
+      "CB",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "OFFENSIVE TACKLE",
+      "OL",
+      "P",
+      "QB",
+      "RB",
+      "S",
+      "TE",
+      "WR"
+    ],
+    "hasOutcomes": false
+  },
+  {
+    "year": 2025,
+    "kind": "recent",
+    "playerCount": 260,
+    "topPlayerIds": [
+      "treveyon-henderson-2025",
+      "jayden-higgins-2025",
+      "mason-taylor-2025",
+      "bhayshul-tuten-2025",
+      "cam-ward-2025"
+    ],
+    "positionsCovered": [
+      "CB",
+      "DL",
+      "EDGE",
+      "K",
+      "LB",
+      "LS",
+      "OL",
+      "P",
+      "QB",
+      "RB",
+      "S",
+      "SPEC",
+      "TE",
+      "WR"
+    ],
+    "hasOutcomes": false
+  }
+]
