@@ -1,4 +1,640 @@
 {
-  "dataReady": false,
-  "positions": []
+  "dataReady": true,
+  "positions": [
+    {
+      "positionGroup": "CB",
+      "playerCount": 470,
+      "featuresUsed": [
+        "Positionvalue",
+        "Upside",
+        "Production",
+        "Size",
+        "Draftcapital",
+        "Efficiency",
+        "Athletic",
+        "Age"
+      ],
+      "topPlayerIds": [
+        "vernon-hargreaves-2016",
+        "mike-hughes-2018",
+        "josh-jackson-2018",
+        "adoree-jackson-2017",
+        "gareon-conley-2017",
+        "kevin-king-2017",
+        "ahkello-witherspoon-2017",
+        "denzel-ward-2018",
+        "jaire-alexander-2018",
+        "jeff-okudah-2020"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "CENTER",
+      "playerCount": 1,
+      "featuresUsed": [
+        "Draftcapital",
+        "Positionvalue",
+        "Upside",
+        "Production"
+      ],
+      "topPlayerIds": [
+        "cameron-jurgens-2022"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "CORNERBACK",
+      "playerCount": 11,
+      "featuresUsed": [
+        "Upside",
+        "Production",
+        "Efficiency",
+        "Size",
+        "Athletic",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "tariq-woolen-2022",
+        "cam-sutton-2017",
+        "ahmad-gardner-2022",
+        "decobie-durant-2022",
+        "tre-vius-hodges-tomlinson-2023",
+        "cj-henderson-2020",
+        "sean-bunting-2019",
+        "josh-holsey-2017",
+        "dex-mcdougle-2014",
+        "dre-hal-2014"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "DEFENSIVE END",
+      "playerCount": 8,
+      "featuresUsed": [
+        "Production",
+        "Upside",
+        "Athletic",
+        "Efficiency",
+        "Size",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "mike-danna-2020",
+        "aj-epenesa-2020",
+        "josh-uche-2020",
+        "john-franklin-meyers-2018",
+        "alexander-armah-2017",
+        "dawaune-smoot-2017",
+        "shaq-riddick-2015",
+        "william-clarke-2014"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "DEFENSIVE TACKLE",
+      "playerCount": 8,
+      "featuresUsed": [
+        "Production",
+        "Efficiency",
+        "Athletic",
+        "Upside",
+        "Draftcapital",
+        "Size",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "d-j-davidson-2022",
+        "justin-madubuike-2020",
+        "sebastian-joseph-2018",
+        "mo-hurst-2018",
+        "rj-mcintosh-2018",
+        "da-ron-payne-2018",
+        "matt-ioannidis-2016",
+        "pj-johnson-2019"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "DL",
+      "playerCount": 305,
+      "featuresUsed": [
+        "Positionvalue",
+        "Efficiency",
+        "Production",
+        "Size",
+        "Athletic",
+        "Draftcapital",
+        "Age",
+        "Upside"
+      ],
+      "topPlayerIds": [
+        "ed-oliver-2019",
+        "dexter-lawrence-2019",
+        "vita-vea-2018",
+        "jeffery-simmons-2019",
+        "taven-bryan-2018",
+        "quinnen-williams-2019",
+        "jordan-davis-2022",
+        "bilal-nichols-2018",
+        "keion-white-2023",
+        "jerry-tillery-2019"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "EDGE",
+      "playerCount": 331,
+      "featuresUsed": [
+        "Positionvalue",
+        "Draftcapital",
+        "Production",
+        "Athletic",
+        "Size",
+        "Upside",
+        "Age",
+        "Efficiency"
+      ],
+      "topPlayerIds": [
+        "myles-garrett-2017",
+        "solomon-thomas-2017",
+        "t-j-watt-2017",
+        "tyus-bowser-2017",
+        "jordan-willis-2017",
+        "derek-barnett-2017",
+        "taco-charlton-2017",
+        "chris-wormley-2017",
+        "derek-rivers-2017",
+        "leighton-vander-esch-2018"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "FULLBACK",
+      "playerCount": 1,
+      "featuresUsed": [
+        "Draftcapital",
+        "Positionvalue",
+        "Upside",
+        "Production"
+      ],
+      "topPlayerIds": [
+        "dan-vitale-2016"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "INSIDE LINEBACKER",
+      "playerCount": 1,
+      "featuresUsed": [
+        "Draftcapital",
+        "Positionvalue",
+        "Upside",
+        "Production"
+      ],
+      "topPlayerIds": [
+        "tj-brunson-2020"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "K",
+      "playerCount": 23,
+      "featuresUsed": [
+        "Upside",
+        "Age",
+        "Size",
+        "Efficiency",
+        "Athletic",
+        "Production",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "tyler-loop-2025",
+        "roberto-aguayo-2016",
+        "nate-freese-2014",
+        "zane-gonzalez-2017",
+        "jason-sanders-2018",
+        "andres-borregales-2025",
+        "harrison-butker-2017",
+        "daniel-carlson-2018",
+        "justin-rohrwasser-2020",
+        "matt-gay-2019"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "LB",
+      "playerCount": 286,
+      "featuresUsed": [
+        "Upside",
+        "Production",
+        "Athletic",
+        "Efficiency",
+        "Size",
+        "Draftcapital",
+        "Age",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "isaiah-simmons-2020",
+        "kenneth-murray-2020",
+        "devin-white-2019",
+        "rashan-gary-2019",
+        "jermaine-johnson-2022",
+        "brandon-smith-2022",
+        "roquan-smith-2018",
+        "devin-bush-2019",
+        "tremaine-edmunds-2018",
+        "marcus-smith-2014"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "LS",
+      "playerCount": 9,
+      "featuresUsed": [
+        "Draftcapital",
+        "Production",
+        "Efficiency",
+        "Upside",
+        "Size",
+        "Age",
+        "Athletic",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "julian-ashby-2025",
+        "camaron-cheeseman-2021",
+        "thomas-fletcher-2021",
+        "austin-cutting-2019",
+        "blake-ferguson-2020",
+        "hunter-bradley-2018",
+        "joe-cardona-2015",
+        "colin-holba-2017",
+        "jimmy-landes-2016"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "OFFENSIVE GUARD",
+      "playerCount": 1,
+      "featuresUsed": [
+        "Draftcapital",
+        "Upside",
+        "Positionvalue",
+        "Production"
+      ],
+      "topPlayerIds": [
+        "denzell-goode-2015"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "OFFENSIVE TACKLE",
+      "playerCount": 2,
+      "featuresUsed": [
+        "Production",
+        "Efficiency",
+        "Athletic",
+        "Size"
+      ],
+      "topPlayerIds": [
+        "olu-fashanu-2024",
+        "robert-havenstein-2015"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "OL",
+      "playerCount": 538,
+      "featuresUsed": [
+        "Positionvalue",
+        "Draftcapital",
+        "Size",
+        "Athletic",
+        "Production",
+        "Efficiency",
+        "Age",
+        "Upside"
+      ],
+      "topPlayerIds": [
+        "frank-ragnow-2018",
+        "mekhi-becton-2020",
+        "ereck-flowers-2015",
+        "braden-smith-2018",
+        "james-daniels-2018",
+        "connor-williams-2018",
+        "geron-christian-2018",
+        "tristan-wirfs-2020",
+        "donovan-smith-2015",
+        "isaiah-wynn-2018"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "OUTSIDE LINEBACKER",
+      "playerCount": 8,
+      "featuresUsed": [
+        "Upside",
+        "Production",
+        "Draftcapital",
+        "Efficiency",
+        "Athletic",
+        "Size",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "josh-allen-2019",
+        "joe-tryon-2021",
+        "jake-martin-2018",
+        "obo-okoronkwo-2018",
+        "darius-leonard-2018",
+        "dadi-lhomme-nicolas-2016",
+        "jordie-tripp-2014",
+        "chris-kirksey-2014"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "P",
+      "playerCount": 23,
+      "featuresUsed": [
+        "Production",
+        "Athletic",
+        "Efficiency",
+        "Age",
+        "Upside",
+        "Size",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "michael-dickson-2018",
+        "bradley-pinion-2015",
+        "johnny-townsend-2018",
+        "jeremy-crawshaw-2025",
+        "mitch-wishnowsky-2019",
+        "drew-kaser-2016",
+        "riley-dixon-2016",
+        "jake-bailey-2019",
+        "jake-camarda-2022",
+        "braden-mann-2020"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "PUNTER",
+      "playerCount": 1,
+      "featuresUsed": [
+        "Draftcapital",
+        "Positionvalue",
+        "Upside",
+        "Production"
+      ],
+      "topPlayerIds": [
+        "loc-edwards-2016"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "QB",
+      "playerCount": 142,
+      "featuresUsed": [
+        "Positionvalue",
+        "Draftcapital",
+        "Athletic",
+        "Production",
+        "Size",
+        "Age",
+        "Upside",
+        "Efficiency"
+      ],
+      "topPlayerIds": [
+        "patrick-mahomes-2017",
+        "deshaun-watson-2017",
+        "trevor-lawrence-2021",
+        "c-j-stroud-2023",
+        "marcus-mariota-2015",
+        "jared-goff-2016",
+        "jalen-hurts-2020",
+        "josh-rosen-2018",
+        "daniel-jones-2019",
+        "justin-herbert-2020"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "RB",
+      "playerCount": 267,
+      "featuresUsed": [
+        "Upside",
+        "Production",
+        "Efficiency",
+        "Size",
+        "Athletic",
+        "Age",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "christian-mccaffrey-2017",
+        "saquon-barkley-2018",
+        "breece-hall-2022",
+        "bijan-robinson-2023",
+        "treveyon-henderson-2025",
+        "t-j-yeldon-2015",
+        "ameer-abdullah-2015",
+        "c-j-prosise-2016",
+        "joe-mixon-2017",
+        "alvin-kamara-2017"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "RUNNING BACK",
+      "playerCount": 6,
+      "featuresUsed": [
+        "Production",
+        "Efficiency",
+        "Upside",
+        "Draftcapital",
+        "Athletic",
+        "Size",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "devon-achane-2023",
+        "ken-walker-2022",
+        "isaih-pacheco-2022",
+        "christopher-carson-2017",
+        "khalfrani-muhammad-2017",
+        "buck-allen-2015"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "S",
+      "playerCount": 177,
+      "featuresUsed": [
+        "Efficiency",
+        "Production",
+        "Size",
+        "Age",
+        "Upside",
+        "Athletic",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "terrell-edmunds-2018",
+        "derwin-james-2018",
+        "jessie-bates-2018",
+        "john-johnson-2017",
+        "ronnie-harrison-2018",
+        "taylor-rapp-2019",
+        "brandon-jones-2020",
+        "keanu-neal-2016",
+        "minkah-fitzpatrick-2018",
+        "troy-apke-2018"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "SAFETY",
+      "playerCount": 9,
+      "featuresUsed": [
+        "Upside",
+        "Production",
+        "Efficiency",
+        "Athletic",
+        "Size",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "jartavius-martin-2023",
+        "trevon-moehrig-2021",
+        "chauncey-gardner-johnson-2019",
+        "ugochukwu-amadi-2019",
+        "delano-hill-2017",
+        "kj-dillon-2016",
+        "ryan-smith-murphy-2015",
+        "ced-thompson-2015",
+        "dez-southward-2014"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "SPEC",
+      "playerCount": 3,
+      "featuresUsed": [
+        "Production",
+        "Efficiency",
+        "Size",
+        "Upside",
+        "Athletic",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "j-k-scott-2018",
+        "lachlan-edwards-2016",
+        "andy-borregales-2025"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "TE",
+      "playerCount": 171,
+      "featuresUsed": [
+        "Production",
+        "Efficiency",
+        "Athletic",
+        "Upside",
+        "Size",
+        "Age",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "david-njoku-2017",
+        "evan-engram-2017",
+        "jonnu-smith-2017",
+        "pat-freiermuth-2021",
+        "brock-bowers-2024",
+        "o-j-howard-2017",
+        "gerald-everett-2017",
+        "albert-okwuegbunam-2020",
+        "mason-taylor-2025",
+        "ja-tavion-sanders-2024"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "TIGHT END",
+      "playerCount": 2,
+      "featuresUsed": [
+        "Production",
+        "Efficiency",
+        "Athletic",
+        "Size"
+      ],
+      "topPlayerIds": [
+        "chigoziem-okonkwo-2022",
+        "aj-derby-2015"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "WIDE RECEIVER",
+      "playerCount": 5,
+      "featuresUsed": [
+        "Upside",
+        "Production",
+        "Efficiency",
+        "Size",
+        "Athletic",
+        "Draftcapital",
+        "Positionvalue"
+      ],
+      "topPlayerIds": [
+        "nathaniel-dell-2023",
+        "gabriel-davis-2020",
+        "d-j-chark-2018",
+        "tj-jones-2014",
+        "dez-lewis-2015"
+      ],
+      "modelType": "composite"
+    },
+    {
+      "positionGroup": "WR",
+      "playerCount": 399,
+      "featuresUsed": [
+        "Positionvalue",
+        "Upside",
+        "Draftcapital",
+        "Efficiency",
+        "Size",
+        "Production",
+        "Athletic",
+        "Age"
+      ],
+      "topPlayerIds": [
+        "amari-cooper-2015",
+        "kevin-white-2015",
+        "corey-coleman-2016",
+        "rashod-bateman-2021",
+        "jordan-addison-2023",
+        "xavier-worthy-2024",
+        "jaelen-strong-2015",
+        "corey-davis-2017",
+        "zay-jones-2017",
+        "skyy-moore-2022"
+      ],
+      "modelType": "composite"
+    }
+  ]
 }

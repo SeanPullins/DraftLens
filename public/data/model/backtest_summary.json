@@ -1,12 +1,12 @@
 {
   "dataReady": false,
   "overallCorrelation": null,
-  "validationScheme": "not yet run",
+  "validationScheme": "not run",
   "byTier": [],
   "byPosition": [],
   "byRound": [],
   "byClass": [],
   "topHits": [],
   "topMisses": [],
-  "notes": "Backtests run after the model is trained on real local data."
+  "notes": "Backtest unavailable without sufficient labeled outcomes."
 }
