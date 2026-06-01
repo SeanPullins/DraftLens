@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDataState } from "../lib/data";
+import { useOpenPlayer } from "../lib/ui";
 import type { Player } from "../lib/types";
 import { ScoreBadge } from "./ScoreBadge";
 import { scoreStyle, tierStyle } from "../lib/scoring";
@@ -35,10 +36,15 @@ function ComponentBar({ label, value }: { label: string; value: number }) {
 }
 
 function DrawerBody({ p, onClose }: { p: Player; onClose: () => void }) {
+  const open = useOpenPlayer();
   const tier = tierStyle(p.tier);
   const components = Object.entries(p.scoreComponents).filter(
     (e): e is [string, number] => typeof e[1] === "number",
   );
+  // A player has a validated result only once career value has accrued. Until
+  // then the score is a forward projection — we label it as such so a rookie's
+  // grade is never mistaken for a known outcome.
+  const validated = p.realizedValue != null;
 
   return (
     <div className="flex h-full flex-col">
@@ -53,6 +59,20 @@ function DrawerBody({ p, onClose }: { p: Player; onClose: () => void }) {
             <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
               <span className={`rounded border px-1.5 py-0.5 ${tier.bg} ${tier.text} ${tier.border}`}>
                 {p.tier}
+              </span>
+              <span
+                className={`rounded border px-1.5 py-0.5 ${
+                  validated
+                    ? "border-slate-600 text-slate-300"
+                    : "border-amber-500/40 bg-amber-500/10 text-amber-400"
+                }`}
+                title={
+                  validated
+                    ? "This player has accumulated NFL career value, so the grade can be checked against reality."
+                    : "This player's NFL career hasn't played out yet — the grade is a forward projection."
+                }
+              >
+                {validated ? "Validated" : "Projection"}
               </span>
               <span className="text-slate-500">{pickLabel(p)}</span>
               {p.actualTeam && <span className="text-slate-500">· {p.actualTeam}</span>}
@@ -75,14 +95,20 @@ function DrawerBody({ p, onClose }: { p: Player; onClose: () => void }) {
           <Stat label="Value vs pick" value={valueVsPickLabel(p.valueVsPick)} sub={signed(p.valueVsPick)} />
         </div>
 
-        <Section title="Projection">
+        <Section title={validated ? "Projection vs. reality" : "Forward projection"}>
           <p className="text-sm text-slate-300">{p.projectedOutcome}</p>
           {p.projectedValue != null && (
             <p className="mt-1 text-xs text-slate-500">Projected value: {num(p.projectedValue)}</p>
           )}
-          {p.realizedOutcome && (
-            <p className="mt-2 text-xs text-slate-400">
-              NFL outcome (historical): <span className="text-slate-200">{p.realizedOutcome}</span>
+          {validated ? (
+            p.realizedOutcome && (
+              <p className="mt-2 text-xs text-slate-400">
+                Actual NFL outcome: <span className="text-slate-200">{p.realizedOutcome}</span>
+              </p>
+            )
+          ) : (
+            <p className="mt-2 text-xs text-amber-500/80">
+              This player's career hasn't played out — there's no result to check against yet.
             </p>
           )}
         </Section>
@@ -148,12 +174,25 @@ function DrawerBody({ p, onClose }: { p: Player; onClose: () => void }) {
         {p.comps.length > 0 && (
           <Section title="Comparable players">
             <div className="flex flex-wrap gap-2">
-              {p.comps.map((c, i) => (
-                <span key={i} className="rounded-md border border-line bg-ink-800 px-2 py-1 text-xs text-slate-300">
-                  {c.name}
-                  <span className="ml-1 text-slate-500">{pct(c.similarity)}</span>
-                </span>
-              ))}
+              {p.comps.map((c, i) => {
+                const cid = c.playerId;
+                return cid ? (
+                  <button
+                    key={i}
+                    onClick={() => open(cid)}
+                    className="rounded-md border border-line bg-ink-800 px-2 py-1 text-xs text-slate-300 transition-colors hover:border-accent/50 hover:text-slate-100"
+                    title={`Open ${c.name}`}
+                  >
+                    {c.name}
+                    <span className="ml-1 text-slate-500">{pct(c.similarity)}</span>
+                  </button>
+                ) : (
+                  <span key={i} className="rounded-md border border-line bg-ink-800 px-2 py-1 text-xs text-slate-300">
+                    {c.name}
+                    <span className="ml-1 text-slate-500">{pct(c.similarity)}</span>
+                  </span>
+                );
+              })}
             </div>
           </Section>
         )}
